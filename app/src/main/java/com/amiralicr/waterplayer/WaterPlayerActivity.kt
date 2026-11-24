@@ -25,6 +25,8 @@ class WaterPlayerActivity : Activity() {
     private val permissionRequest = 7142
     private val fileChooserRequest = 7143
     private var filePathCallback: ValueCallback<Array<Uri>>? = null
+    private val selectedAudioPrefs by lazy { getSharedPreferences("water_player_audio", MODE_PRIVATE) }
+    private val selectedAudioKey = "persisted_audio_uris"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +51,7 @@ class WaterPlayerActivity : Activity() {
                     addCategory(Intent.CATEGORY_OPENABLE)
                     type = "audio/*"
                     putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
                 }
 
                 return try {
@@ -74,6 +76,8 @@ class WaterPlayerActivity : Activity() {
             if (callback != null) {
                 val selectedUris = mutableListOf<Uri>()
                 if (resultCode == RESULT_OK && data != null) {
+                    val grantedFlags = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                    val savedUris = selectedAudioPrefs.getStringSet(selectedAudioKey, emptySet())?.toMutableSet() ?: mutableSetOf()
                     val clip = data.clipData
                     if (clip != null) {
                         for (index in 0 until clip.itemCount) {
@@ -82,6 +86,13 @@ class WaterPlayerActivity : Activity() {
                     } else {
                         data.data?.let { selectedUris.add(it) }
                     }
+                    selectedUris.forEach { uri ->
+                        try {
+                            contentResolver.takePersistableUriPermission(uri, grantedFlags and Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            savedUris.add(uri.toString())
+                        } catch (_: Exception) { }
+                    }
+                    selectedAudioPrefs.edit().putStringSet(selectedAudioKey, savedUris).apply()
                 }
                 callback.onReceiveValue(selectedUris.takeIf { it.isNotEmpty() }?.toTypedArray())
             }
@@ -175,6 +186,38 @@ class WaterPlayerActivity : Activity() {
                         item.put("coverUrl", "content://media/external/audio/albumart/$albumId")
                         result.put(item)
                     }
+                }
+            } catch (_: Exception) { }
+
+            // Re-add files explicitly selected by the user, even if they are outside MediaStore.
+            val indexedUris = HashSet<String>()
+            try {
+                val savedUris = selectedAudioPrefs.getStringSet(selectedAudioKey, emptySet()) ?: emptySet()
+                for (savedUri in savedUris) {
+                    if (!indexedUris.add(savedUri)) continue
+                    val uri = Uri.parse(savedUri)
+                    try {
+                        val nameAndDuration = arrayOf(android.provider.OpenableColumns.DISPLAY_NAME, MediaStore.Audio.Media.DURATION)
+                        var displayName = "آهنگ انتخاب‌شده"
+                        var durationMs = 0L
+                        contentResolver.query(uri, nameAndDuration, null, null, null)?.use { c ->
+                            if (c.moveToFirst()) {
+                                val nameIndex = c.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+                                val durationIndex = c.getColumnIndex(MediaStore.Audio.Media.DURATION)
+                                if (nameIndex >= 0) displayName = c.getString(nameIndex) ?: displayName
+                                if (durationIndex >= 0 && !c.isNull(durationIndex)) durationMs = c.getLong(durationIndex)
+                            }
+                        }
+                        val item = JSONObject()
+                        item.put("id", "picked-${savedUri.hashCode()}")
+                        item.put("title", displayName.substringBeforeLast('.', displayName))
+                        item.put("artist", "آهنگ انتخاب‌شده")
+                        item.put("album", "Local Audio")
+                        item.put("duration", (durationMs / 1000L).coerceAtLeast(1L))
+                        item.put("fileUrl", savedUri)
+                        item.put("coverUrl", JSONObject.NULL)
+                        result.put(item)
+                    } catch (_: Exception) { }
                 }
             } catch (_: Exception) { }
             return result.toString()
