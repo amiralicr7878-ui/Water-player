@@ -152,6 +152,7 @@ class WaterPlayerActivity : Activity() {
         @JavascriptInterface fun getAudioLibrary(): String {
             if (!hasAudioPermission()) return "[]"
             val result = JSONArray()
+            val indexedUris = HashSet<String>()
             val collection = if (Build.VERSION.SDK_INT >= 29)
                 MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
             else MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -176,6 +177,7 @@ class WaterPlayerActivity : Activity() {
                         val id = c.getLong(idCol)
                         val albumId = c.getLong(albumIdCol)
                         val itemUri = ContentUris.withAppendedId(collection, id)
+                        indexedUris.add(itemUri.toString())
                         val item = JSONObject()
                         item.put("id", "media-$id")
                         item.put("title", c.getString(titleCol) ?: "بدون عنوان")
@@ -190,7 +192,6 @@ class WaterPlayerActivity : Activity() {
             } catch (_: Exception) { }
 
             // Re-add files explicitly selected by the user, even if they are outside MediaStore.
-            val indexedUris = HashSet<String>()
             try {
                 val savedUris = selectedAudioPrefs.getStringSet(selectedAudioKey, emptySet()) ?: emptySet()
                 for (savedUri in savedUris) {
