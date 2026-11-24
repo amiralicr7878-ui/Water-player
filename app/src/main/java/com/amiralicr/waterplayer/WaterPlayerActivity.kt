@@ -3,12 +3,15 @@ package com.amiralicr.waterplayer
 import android.Manifest
 import android.app.Activity
 import android.content.ContentUris
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.webkit.JavascriptInterface
+import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -20,6 +23,8 @@ import org.json.JSONObject
 class WaterPlayerActivity : Activity() {
     private lateinit var webView: WebView
     private val permissionRequest = 7142
+    private val fileChooserRequest = 7143
+    private var filePathCallback: ValueCallback<Array<Uri>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,13 +36,63 @@ class WaterPlayerActivity : Activity() {
         webView.settings.mediaPlaybackRequiresUserGesture = false
         webView.settings.allowFileAccess = true
         webView.settings.allowContentAccess = true
-        webView.webChromeClient = WebChromeClient()
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onShowFileChooser(
+                view: WebView?,
+                callback: ValueCallback<Array<Uri>>?,
+                fileChooserParams: FileChooserParams?
+            ): Boolean {
+                filePathCallback?.onReceiveValue(null)
+                filePathCallback = callback
+
+                val chooser = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "audio/*"
+                    putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+
+                return try {
+                    startActivityForResult(chooser, fileChooserRequest)
+                    true
+                } catch (_: Exception) {
+                    filePathCallback?.onReceiveValue(null)
+                    filePathCallback = null
+                    false
+                }
+            }
+        }
         webView.webViewClient = WebViewClient()
         webView.addJavascriptInterface(NativeBridge(), "AndroidMusic")
         webView.loadUrl("file:///android_asset/index.html")
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == fileChooserRequest) {
+            val callback = filePathCallback
+            filePathCallback = null
+            if (callback != null) {
+                val selectedUris = mutableListOf<Uri>()
+                if (resultCode == RESULT_OK && data != null) {
+                    val clip = data.clipData
+                    if (clip != null) {
+                        for (index in 0 until clip.itemCount) {
+                            selectedUris.add(clip.getItemAt(index).uri)
+                        }
+                    } else {
+                        data.data?.let { selectedUris.add(it) }
+                    }
+                }
+                callback.onReceiveValue(selectedUris.takeIf { it.isNotEmpty() }?.toTypedArray())
+            }
+            return
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     override fun onDestroy() {
+        filePathCallback?.onReceiveValue(null)
+        filePathCallback = null
         if (instance === this) instance = null
         webView.destroy()
         super.onDestroy()
@@ -50,10 +105,16 @@ class WaterPlayerActivity : Activity() {
         ContextCompat.checkSelfPermission(this, audioPermission()) == PackageManager.PERMISSION_GRANTED
 
     private fun requestNativePermissions() {
+        if (hasAudioPermission()) {
+            notifyPermissionReady()
+            return
+        }
+
         val requested = mutableListOf(audioPermission())
         if (Build.VERSION.SDK_INT >= 33 &&
             ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
         ) requested.add(Manifest.permission.POST_NOTIFICATIONS)
+
         val missing = requested.filter {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
         }
@@ -73,7 +134,9 @@ class WaterPlayerActivity : Activity() {
     }
 
     inner class NativeBridge {
-        @JavascriptInterface fun requestPermissions() { runOnUiThread { requestNativePermissions() } }
+        @JavascriptInterface fun requestPermissions() {
+            runOnUiThread { requestNativePermissions() }
+        }
 
         @JavascriptInterface fun getAudioLibrary(): String {
             if (!hasAudioPermission()) return "[]"
@@ -118,7 +181,7 @@ class WaterPlayerActivity : Activity() {
         }
 
         @JavascriptInterface fun updateMetadata(json: String) {
-            val intent = android.content.Intent(this@WaterPlayerActivity, WaterPlaybackService::class.java).apply {
+            val intent = Intent(this@WaterPlayerActivity, WaterPlaybackService::class.java).apply {
                 action = WaterPlaybackService.ACTION_METADATA
                 putExtra(WaterPlaybackService.EXTRA_METADATA, json)
             }
@@ -127,7 +190,7 @@ class WaterPlayerActivity : Activity() {
 
         @JavascriptInterface fun setPlaybackState(playing: Boolean, positionMs: Long) {
             val action = if (playing) WaterPlaybackService.ACTION_PLAY else WaterPlaybackService.ACTION_PAUSE
-            val intent = android.content.Intent(this@WaterPlayerActivity, WaterPlaybackService::class.java).apply {
+            val intent = Intent(this@WaterPlayerActivity, WaterPlaybackService::class.java).apply {
                 this.action = action
                 putExtra(WaterPlaybackService.EXTRA_POSITION, positionMs)
             }
@@ -135,7 +198,7 @@ class WaterPlayerActivity : Activity() {
         }
 
         @JavascriptInterface fun updatePosition(positionMs: Long, durationMs: Long) {
-            val intent = android.content.Intent(this@WaterPlayerActivity, WaterPlaybackService::class.java).apply {
+            val intent = Intent(this@WaterPlayerActivity, WaterPlaybackService::class.java).apply {
                 action = WaterPlaybackService.ACTION_POSITION
                 putExtra(WaterPlaybackService.EXTRA_POSITION, positionMs)
                 putExtra(WaterPlaybackService.EXTRA_DURATION, durationMs)
