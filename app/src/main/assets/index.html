@@ -5821,6 +5821,28 @@
             persistState();
           }
         };
+
+        // Request native audio access only after the WebView bridge and scanner are ready.
+        window.onWaterAudioPermissionGranted = async function () {
+          if (!window.AndroidMusic || typeof window.AndroidMusic.getAudioLibrary !== 'function') return;
+          try {
+            const rawLibrary = window.AndroidMusic.getAudioLibrary();
+            const library = JSON.parse(rawLibrary || '[]');
+            if (Array.isArray(library) && library.length) {
+              await window.applyAutoScannedTracks(library);
+              showToast(`${library.length} آهنگ از حافظه گوشی شناسایی شد 🎵`);
+            } else {
+              showToast('آهنگی در حافظه گوشی پیدا نشد');
+            }
+          } catch (error) {
+            console.warn('Water Player audio scan failed:', error);
+            showToast('خواندن آهنگ‌های گوشی انجام نشد');
+          }
+        };
+
+        if (window.AndroidMusic && typeof window.AndroidMusic.requestPermissions === 'function') {
+          window.AndroidMusic.requestPermissions();
+        }
       }
 
       function bootApp() {
