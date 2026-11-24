@@ -2695,6 +2695,7 @@
 
         loadTrack(track, autoPlay, initialOffset = 0) {
           this.currentTrack = track;
+          if (window.AndroidMusic) { try { window.AndroidMusic.updateMetadata(JSON.stringify({ title: track.title || '', artist: track.artist || '', album: track.album || '', artwork: track.coverUrl || '', duration: Math.max(0, Number(track.duration || 0) * 1000) })); } catch (_) {} }
           this.currentTime = Math.max(0, initialOffset || 0);
           this.stepIdx = 0;
           this.audioEl.pause();
@@ -2726,6 +2727,7 @@
         play() {
           this.ensureCtx();
           this.isPlaying = true;
+          if (window.AndroidMusic) { try { window.AndroidMusic.setPlaybackState(true, Math.round(this.getCurrentTime() * 1000)); } catch (_) {} }
           this.lastTick = performance.now();
           if (this.mode === 'file') {
             this.audioEl.play().catch(() => {});
@@ -2736,6 +2738,7 @@
 
         pause() {
           this.isPlaying = false;
+          if (window.AndroidMusic) { try { window.AndroidMusic.setPlaybackState(false, Math.round(this.getCurrentTime() * 1000)); } catch (_) {} }
           if (this.mode === 'file') {
             this.audioEl.pause();
           }
@@ -3332,7 +3335,7 @@
             state.tracks.forEach((t) => {
               if (t.id && t.id.startsWith('track-')) {
                 demoLikes[t.id] = Boolean(t.liked);
-              } else if (t.id) {
+              } else if (t.id && !t.nativeMedia) {
                 customTracks.push({
                   id: t.id,
                   title: t.title,
@@ -4194,6 +4197,31 @@
             nextTrack();
           }
         }
+
+        window.WaterPlayerNativeAction = function(action, positionMs) {
+          if (action === 'play') { audioEngine.play(); syncPlayIcons(); persistState(true); }
+          else if (action === 'pause') { audioEngine.pause(); syncPlayIcons(); persistState(true); }
+          else if (action === 'next') { nextTrack(); }
+          else if (action === 'previous') { prevTrack(); }
+          else if (action === 'seek' && Number.isFinite(Number(positionMs))) { audioEngine.seek(Number(positionMs) / 1000); if (dom.npCurrentTime) dom.npCurrentTime.textContent = formatTime(audioEngine.getCurrentTime()); persistState(true); }
+        };
+        function importNativeAudioLibrary() {
+          if (!window.AndroidMusic) return;
+          try {
+            const items = JSON.parse(window.AndroidMusic.getAudioLibrary() || '[]');
+            if (!Array.isArray(items) || !items.length) return;
+            const known = new Set(state.tracks.map((track) => track.id)); let added = 0;
+            items.forEach((item, index) => {
+              if (!item || !item.id || known.has(item.id) || !item.fileUrl) return;
+              const hue = (index * 47 + 190) % 360;
+              state.tracks.push({ id:item.id, title:item.title || 'بدون عنوان', artist:item.artist || 'هنرمند ناشناس', album:item.album || 'Local Audio', duration:Math.max(1,Number(item.duration)||180), fileUrl:item.fileUrl, coverUrl:item.coverUrl || null, nativeMedia:true, liked:false, addedAt:Date.now()-index, c1:'hsl('+hue+' 90% 62%)', c2:'hsl('+((hue+48)%360)+' 85% 58%)', c3:'hsl('+((hue+105)%360)+' 82% 62%)', glow:'hsla('+hue+', 90%, 62%, .52)' });
+              known.add(item.id); added++;
+            });
+            if (added) { renderArtistFilterBar(); renderSongList(false); persistState(true); showToast(added + ' آهنگ از حافظه شناسایی شد'); }
+          } catch (error) { console.warn('Water Player media scan failed', error); }
+        }
+        window.onWaterAudioPermissionGranted = importNativeAudioLibrary;
+        if (window.AndroidMusic) { try { window.AndroidMusic.requestPermissions(); } catch (_) {} }
 
         function spawnHeartAura(btnEl) {
           if (!btnEl) return;
@@ -5556,6 +5584,10 @@
           lastFrameTime = now;
 
           audioEngine.update(now);
+          if (window.AndroidMusic && audioEngine.isPlaying && now - (window.__waterLastPositionSync || 0) > 1000) {
+            window.__waterLastPositionSync = now;
+            try { window.AndroidMusic.updatePosition(Math.round(audioEngine.getCurrentTime() * 1000), Math.round(audioEngine.getDuration() * 1000)); } catch (_) {}
+          }
 
           const isOverlayBusy =
             state.nowPlayingOpen ||
