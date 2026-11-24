@@ -118,8 +118,6 @@
       opacity: 0.48;
       pointer-events: none;
       z-index: 1;
-      will-change: transform;
-      animation: orbFloat 18s ease-in-out infinite alternate;
     }
 
     .ambient-orb-1 {
@@ -145,11 +143,6 @@
       animation-play-state: paused !important;
     }
 
-    @keyframes orbFloat {
-      0% { transform: translate3d(0, 0, 0) scale(1); }
-      100% { transform: translate3d(-14px, 18px, 0) scale(1.06); }
-    }
-
     #weatherCanvas {
       position: absolute;
       inset: 0;
@@ -171,6 +164,7 @@
       opacity: 0.72;
       background: radial-gradient(circle, var(--accent-1) 0%, var(--accent-3) 55%, transparent 72%);
       animation: themeRadialBurst 0.8s cubic-bezier(0.22, 1.25, 0.32, 1) forwards;
+      will-change: transform, opacity;
     }
 
     @keyframes themeRadialBurst {
@@ -183,12 +177,10 @@
        ========================================= */
     .glass-panel {
       background: rgba(var(--glass-rgb), var(--glass-alpha));
-      backdrop-filter: blur(var(--glass-blur)) saturate(175%);
-      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(175%);
       border: 1px solid rgba(var(--glass-border-rgb), var(--glass-border-alpha));
       box-shadow:
         inset 0 1px 1.5px rgba(255, 255, 255, var(--glass-highlight-alpha)),
-        0 10px 28px rgba(0, 0, 0, 0.28);
+        0 8px 20px rgba(0, 0, 0, 0.24);
     }
 
     .neon-title-text {
@@ -196,7 +188,6 @@
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      filter: drop-shadow(0 0 14px var(--accent-glow));
     }
 
     .icon-btn-glass {
@@ -205,11 +196,9 @@
       align-items: center;
       justify-content: center;
       border-radius: 9999px;
-      background: rgba(var(--glass-rgb), calc(var(--glass-alpha) + 0.1));
-      backdrop-filter: blur(var(--glass-blur));
-      -webkit-backdrop-filter: blur(var(--glass-blur));
+      background: rgba(var(--glass-rgb), calc(var(--glass-alpha) + 0.14));
       border: 1px solid rgba(var(--glass-border-rgb), calc(var(--glass-border-alpha) + 0.06));
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 6px 18px rgba(0, 0, 0, 0.26);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 4px 12px rgba(0, 0, 0, 0.24);
       transition: transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.25s ease, box-shadow 0.25s ease;
       cursor: pointer;
     }
@@ -233,12 +222,7 @@
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
-      animation: spinSlow 6s linear infinite;
       pointer-events: none;
-    }
-
-    @keyframes spinSlow {
-      to { transform: rotate(360deg); }
     }
 
     .theme-icon-spin {
@@ -257,10 +241,10 @@
 
     @keyframes themeIconGulp {
       0% { transform: scale(1); box-shadow: 0 0 0 0 var(--accent-glow); }
-      28% { transform: scale(1.28); box-shadow: 0 0 26px 6px var(--accent-glow), inset 0 0 14px var(--accent-1); }
-      56% { transform: scale(0.84); box-shadow: 0 0 12px 1px var(--accent-glow); }
+      28% { transform: scale(1.28); box-shadow: 0 0 22px 4px var(--accent-glow), inset 0 0 12px var(--accent-1); }
+      56% { transform: scale(0.84); box-shadow: 0 0 10px 1px var(--accent-glow); }
       80% { transform: scale(1.09); }
-      100% { transform: scale(1); box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 6px 18px rgba(0, 0, 0, 0.26); }
+      100% { transform: scale(1); box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 4px 12px rgba(0, 0, 0, 0.24); }
     }
 
     .theme-swallow-toast {
@@ -278,11 +262,9 @@
       font-size: 12px;
       font-weight: 700;
       color: #f8fafc;
-      background: rgba(10, 16, 32, 0.92);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      background: rgba(10, 16, 32, 0.94);
       border: 1px solid color-mix(in srgb, var(--accent-1) 55%, rgba(255, 255, 255, 0.2));
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55), 0 0 22px -4px var(--accent-glow);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5), 0 0 16px -4px var(--accent-glow);
       opacity: 0;
       transform: translate3d(0, 0, 0) translate(-50%, -50%) scale(0.15);
       will-change: transform, opacity;
@@ -307,7 +289,7 @@
     .settings-btn-anticipate {
       transform: scale(1.18);
       border-color: color-mix(in srgb, var(--accent-1) 85%, white);
-      box-shadow: 0 0 26px 4px var(--accent-glow), inset 0 0 14px var(--accent-glow);
+      box-shadow: 0 0 20px 3px var(--accent-glow), inset 0 0 12px var(--accent-glow);
       transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease;
     }
 
@@ -321,30 +303,30 @@
 
     @keyframes settingsIconLaunch {
       0% { transform: scale(1); }
-      32% { transform: scale(0.82); box-shadow: 0 0 24px 4px var(--accent-glow), inset 0 0 12px var(--accent-1); }
-      68% { transform: scale(1.16); box-shadow: 0 0 18px 2px var(--accent-glow); }
+      32% { transform: scale(0.82); box-shadow: 0 0 20px 3px var(--accent-glow), inset 0 0 10px var(--accent-1); }
+      68% { transform: scale(1.16); box-shadow: 0 0 16px 2px var(--accent-glow); }
       100% { transform: scale(1); }
     }
 
     @keyframes settingsIconGulp {
-      0% { transform: scale(1.18); box-shadow: 0 0 18px 2px var(--accent-glow); }
-      22% { transform: scale(1.4); box-shadow: 0 0 36px 8px var(--accent-glow), inset 0 0 18px var(--accent-1); }
-      52% { transform: scale(0.76); box-shadow: 0 0 14px 2px var(--accent-glow); }
-      78% { transform: scale(1.12); box-shadow: 0 0 20px 3px var(--accent-glow); }
-      100% { transform: scale(1); box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 6px 18px rgba(0, 0, 0, 0.26); }
+      0% { transform: scale(1.18); box-shadow: 0 0 16px 2px var(--accent-glow); }
+      22% { transform: scale(1.4); box-shadow: 0 0 28px 6px var(--accent-glow), inset 0 0 14px var(--accent-1); }
+      52% { transform: scale(0.76); box-shadow: 0 0 12px 2px var(--accent-glow); }
+      78% { transform: scale(1.12); box-shadow: 0 0 18px 3px var(--accent-glow); }
+      100% { transform: scale(1); box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 4px 12px rgba(0, 0, 0, 0.24); }
     }
 
     @keyframes gearPortalOpen {
       0% { transform: rotate(0deg) scale(1); }
       35% { transform: rotate(-32deg) scale(0.84); }
-      75% { transform: rotate(148deg) scale(1.22); filter: drop-shadow(0 0 10px var(--accent-1)); }
-      100% { transform: rotate(120deg) scale(1); filter: drop-shadow(0 0 6px var(--accent-1)); }
+      75% { transform: rotate(148deg) scale(1.22); }
+      100% { transform: rotate(120deg) scale(1); }
     }
 
     @keyframes gearPortalClose {
-      0% { transform: rotate(120deg) scale(1); filter: drop-shadow(0 0 6px var(--accent-1)); }
+      0% { transform: rotate(120deg) scale(1); }
       45% { transform: rotate(-18deg) scale(1.14); }
-      100% { transform: rotate(0deg) scale(1); filter: none; }
+      100% { transform: rotate(0deg) scale(1); }
     }
 
     .main-screen {
@@ -355,6 +337,7 @@
       height: 100%;
       width: 100%;
       will-change: transform, opacity;
+      transform: translateZ(0);
       transition: transform 0.46s cubic-bezier(0.34, 1.42, 0.36, 1), opacity 0.32s ease;
       transform-origin: center top;
     }
@@ -375,8 +358,6 @@
       padding: 5px;
       border-radius: 9999px;
       background: rgba(var(--glass-rgb), calc(var(--glass-alpha) + 0.14));
-      backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
       border: 1px solid rgba(var(--glass-border-rgb), calc(var(--glass-border-alpha) + 0.08));
       box-shadow:
         inset 0 1.5px 2px rgba(255, 255, 255, var(--glass-highlight-alpha)),
@@ -408,10 +389,11 @@
       z-index: 1;
       background: var(--glider-bg);
       box-shadow:
-        0 4px 20px -2px var(--glider-glow),
+        0 4px 18px -2px var(--glider-glow),
         inset 0 1.5px 2px rgba(255, 255, 255, 0.65),
         inset 0 -2px 4px rgba(0, 0, 0, 0.18);
       will-change: transform, width;
+      transform: translateZ(0);
       transition:
         transform 0.52s cubic-bezier(0.34, 1.52, 0.36, 1),
         width 0.48s cubic-bezier(0.34, 1.52, 0.36, 1),
@@ -442,11 +424,12 @@
     }
 
     @keyframes tabGliderJellyBloom {
-      0% { filter: brightness(1.42); box-shadow: 0 0 30px 4px var(--glider-glow), inset 0 2px 4px rgba(255, 255, 255, 0.9); }
-      50% { filter: brightness(1.16); box-shadow: 0 4px 24px 0 var(--glider-glow), inset 0 1.5px 2px rgba(255, 255, 255, 0.72); }
-      100% { filter: brightness(1); box-shadow: 0 4px 20px -2px var(--glider-glow), inset 0 1.5px 2px rgba(255, 255, 255, 0.65), inset 0 -2px 4px rgba(0, 0, 0, 0.18); }
+      0% { filter: brightness(1.42); box-shadow: 0 0 24px 3px var(--glider-glow), inset 0 2px 4px rgba(255, 255, 255, 0.9); }
+      50% { filter: brightness(1.16); box-shadow: 0 4px 20px 0 var(--glider-glow), inset 0 1.5px 2px rgba(255, 255, 255, 0.72); }
+      100% { filter: brightness(1); box-shadow: 0 4px 18px -2px var(--glider-glow), inset 0 1.5px 2px rgba(255, 255, 255, 0.65), inset 0 -2px 4px rgba(0, 0, 0, 0.18); }
     }
 
+    /* GPU-composited lighter shadows on moving droplets for 60/120fps Android WebView */
     .tab-droplet-fly {
       position: absolute;
       left: 0;
@@ -457,6 +440,7 @@
       pointer-events: none;
       transform-origin: center center;
       will-change: transform, opacity;
+      transform: translate3d(0, 0, 0);
     }
 
     .tab-droplet-core {
@@ -464,18 +448,15 @@
       width: 100%;
       height: 100%;
       border-radius: 50% 50% 50% 8% / 50% 50% 50% 8%;
-      transform: rotate(45deg);
+      transform: rotate(45deg) translateZ(0);
       background: radial-gradient(
         circle at 66% 34%,
         rgba(255, 255, 255, 0.96) 0%,
-        var(--tab-c1, var(--accent-1)) 30%,
-        var(--tab-c2, var(--accent-2)) 68%,
+        var(--tab-c1, var(--accent-1)) 32%,
+        var(--tab-c2, var(--accent-2)) 70%,
         var(--tab-c3, var(--accent-3)) 100%
       );
-      box-shadow:
-        0 0 20px 4px var(--tab-glow, var(--accent-glow)),
-        inset 0 2px 6px rgba(255, 255, 255, 0.92),
-        inset -3px -4px 7px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 0 12px 2px var(--tab-glow, var(--accent-glow));
       transition: border-radius 0.12s ease;
     }
 
@@ -502,9 +483,10 @@
       border-radius: 9999px;
       z-index: 91;
       pointer-events: none;
-      background: radial-gradient(circle at 35% 35%, #ffffff 0%, var(--tab-c1, var(--accent-1)) 48%, var(--tab-c3, var(--accent-3)) 100%);
-      box-shadow: 0 0 10px 1.5px var(--tab-glow, var(--accent-glow));
+      background: radial-gradient(circle at 35% 35%, #ffffff 0%, var(--tab-c1, var(--accent-1)) 52%, var(--tab-c3, var(--accent-3)) 100%);
+      box-shadow: 0 0 6px 1px var(--tab-glow, var(--accent-glow));
       will-change: transform, opacity;
+      transform: translate3d(0, 0, 0);
     }
 
     .tab-splash-ring {
@@ -515,9 +497,10 @@
       pointer-events: none;
       z-index: 91;
       border: 2px solid var(--tab-c1, var(--accent-1));
-      box-shadow: 0 0 18px var(--tab-glow, var(--accent-glow)), inset 0 0 10px var(--tab-glow, var(--accent-glow));
+      box-shadow: 0 0 12px var(--tab-glow, var(--accent-glow));
       transform: translate(-50%, -50%) scale(0.4);
       opacity: 0.95;
+      will-change: transform, opacity;
       animation: tabSplashRipple 0.48s cubic-bezier(0.22, 1.35, 0.3, 1) forwards;
     }
 
@@ -529,8 +512,8 @@
       pointer-events: none;
       z-index: 92;
       background: radial-gradient(circle, #ffffff 0%, var(--tab-c1, var(--accent-1)) 65%);
-      box-shadow: 0 0 8px var(--tab-c1, var(--accent-1));
       transform: translate(-50%, -50%);
+      will-change: transform, opacity;
       animation: tabSplashDotFly 0.46s cubic-bezier(0.22, 1.32, 0.3, 1) forwards;
     }
 
@@ -618,59 +601,54 @@
       overflow: hidden;
       border-radius: 22px;
       cursor: pointer;
+      contain: layout style paint;
       transform-origin: center center;
-      will-change: transform;
+      transform: translateZ(0);
       transition:
-        transform 0.46s cubic-bezier(0.34, 1.56, 0.64, 1),
-        border-color 0.3s ease,
-        box-shadow 0.35s ease;
+        transform 0.36s cubic-bezier(0.22, 1.38, 0.36, 1),
+        border-color 0.22s ease,
+        box-shadow 0.22s ease;
     }
 
     .song-card .card-cover-badge {
-      transition: transform 0.48s cubic-bezier(0.34, 1.62, 0.54, 1), box-shadow 0.35s ease;
-    }
-
-    .song-card:hover {
-      transform: translate3d(0, -1px, 0) scale(1.012);
+      transition: transform 0.38s cubic-bezier(0.22, 1.42, 0.36, 1);
     }
 
     .song-card.is-spring-pressing {
-      transform: translate3d(0, 1px, 0) scale(0.945, 0.965);
-      transition: transform 0.14s cubic-bezier(0.25, 0.9, 0.35, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+      will-change: transform;
+      transform: scale3d(0.96, 0.96, 1);
+      transition: transform 0.11s cubic-bezier(0.25, 0.9, 0.35, 1);
     }
 
     .song-card.is-spring-pressing .card-cover-badge {
-      transform: scale(0.88) rotate(-4deg);
-      transition: transform 0.14s cubic-bezier(0.25, 0.9, 0.35, 1);
+      transform: scale3d(0.91, 0.91, 1);
+      transition: transform 0.11s cubic-bezier(0.25, 0.9, 0.35, 1);
     }
 
     .song-card.spring-tap-rebound {
-      animation: songCardSpringRebound 0.66s cubic-bezier(0.34, 1.62, 0.42, 1) forwards;
+      will-change: transform;
+      animation: songCardSpringRebound 0.44s cubic-bezier(0.22, 1.38, 0.36, 1) forwards;
     }
 
     .song-card.spring-tap-rebound .card-cover-badge {
-      animation: cardCoverSpringPop 0.68s cubic-bezier(0.34, 1.68, 0.44, 1) forwards;
+      animation: cardCoverSpringPop 0.46s cubic-bezier(0.22, 1.45, 0.36, 1) forwards;
     }
 
     @keyframes songCardSpringRebound {
-      0% { transform: scale(0.945, 0.965); }
-      34% { transform: scale(1.034, 1.022); }
-      58% { transform: scale(0.985, 0.992); }
-      78% { transform: scale(1.012, 1.008); }
-      100% { transform: scale(1, 1); }
+      0% { transform: scale3d(0.96, 0.96, 1); }
+      45% { transform: scale3d(1.022, 1.018, 1); }
+      100% { transform: scale3d(1, 1, 1); }
     }
 
     @keyframes cardCoverSpringPop {
-      0% { transform: scale(0.88) rotate(-4deg); }
-      38% { transform: scale(1.16) rotate(4deg); }
-      66% { transform: scale(0.95) rotate(-1.5deg); }
-      86% { transform: scale(1.04) rotate(0.8deg); }
-      100% { transform: scale(1) rotate(0deg); }
+      0% { transform: scale3d(0.91, 0.91, 1); }
+      48% { transform: scale3d(1.09, 1.09, 1); }
+      100% { transform: scale3d(1, 1, 1); }
     }
 
     .song-card.is-playing {
       border: 1.5px solid var(--card-c1, var(--accent-1));
-      box-shadow: 0 10px 30px -6px var(--card-glow, var(--accent-glow)), 0 0 16px -4px var(--card-glow, var(--accent-glow)), inset 0 1px 2px rgba(255, 255, 255, 0.24);
+      box-shadow: 0 10px 26px -6px var(--card-glow, var(--accent-glow)), 0 0 14px -4px var(--card-glow, var(--accent-glow)), inset 0 1px 2px rgba(255, 255, 255, 0.24);
     }
 
     .song-card::after {
@@ -722,7 +700,6 @@
 
     .song-card.is-playing .song-title-text {
       background-position: 100% 50%;
-      filter: drop-shadow(0 0 10px color-mix(in srgb, var(--card-c1, #00f2fe) 45%, transparent));
     }
 
     .song-card.wave-rtl .song-title-text {
@@ -742,9 +719,8 @@
       transition: box-shadow 0.2s ease, border-color 0.2s ease !important;
       border-color: color-mix(in srgb, var(--card-c1, var(--accent-1)) 85%, white) !important;
       box-shadow:
-        0 20px 44px rgba(0, 0, 0, 0.65),
-        0 0 28px -2px var(--card-glow, var(--accent-glow)),
-        inset 0 1px 2px rgba(255, 255, 255, 0.35) !important;
+        0 18px 36px rgba(0, 0, 0, 0.6),
+        0 0 22px -2px var(--card-glow, var(--accent-glow)) !important;
       cursor: grabbing;
     }
 
@@ -770,7 +746,7 @@
       transform: scale(1.14);
     }
 
-    /* Long-Press Revealed Action Track (GPU-composited 60fps: Heart slides aside, Delete springs in) */
+    /* Long-Press Revealed Action Track */
     .card-actions-wrap {
       position: relative;
       display: inline-flex;
@@ -815,7 +791,7 @@
       color: #fda4af;
       background: linear-gradient(135deg, rgba(244, 63, 94, 0.32), rgba(225, 29, 72, 0.48));
       border: 1px solid rgba(251, 113, 133, 0.5);
-      box-shadow: 0 0 14px rgba(244, 63, 94, 0.42);
+      box-shadow: 0 0 12px rgba(244, 63, 94, 0.38);
       will-change: transform, opacity;
       transform: translate3d(-12px, 0, 0) scale(0.45);
       transition:
@@ -833,7 +809,6 @@
       transform: scale(0.84);
     }
 
-    /* Dramatic Neon Vaporize / Shatter & Implode Delete Animation */
     .song-card.is-deleting {
       pointer-events: none;
       overflow: hidden;
@@ -862,30 +837,26 @@
       0% {
         opacity: 1;
         transform: translate3d(0, 0, 0) scale(1) rotateX(0deg);
-        filter: brightness(1) blur(0px);
         max-height: 86px;
         margin-bottom: 10px;
       }
       26% {
         opacity: 1;
         transform: translate3d(0, 0, 0) scale(1.03, 0.94) rotateX(8deg);
-        filter: brightness(1.55) saturate(1.4) blur(0px);
         border-color: rgba(244, 63, 94, 0.95);
-        box-shadow: 0 0 32px rgba(244, 63, 94, 0.78), inset 0 0 22px rgba(244, 63, 94, 0.65);
+        box-shadow: 0 0 28px rgba(244, 63, 94, 0.72), inset 0 0 18px rgba(244, 63, 94, 0.6);
         max-height: 86px;
         margin-bottom: 10px;
       }
       62% {
         opacity: 0.35;
         transform: translate3d(0, 0, 0) scale(0.84, 0.16) rotateX(22deg);
-        filter: brightness(1.8) blur(3px);
         max-height: 76px;
         margin-bottom: 10px;
       }
       100% {
         opacity: 0;
         transform: translate3d(0, 0, 0) scale(0.55, 0) rotateX(30deg);
-        filter: brightness(2) blur(6px);
         max-height: 0px;
         padding-top: 0px;
         padding-bottom: 0px;
@@ -910,7 +881,8 @@
       top: -12px;
       border-radius: 9999px;
       border: 2px solid #fb7185;
-      box-shadow: 0 0 18px rgba(244, 63, 94, 0.95);
+      box-shadow: 0 0 14px rgba(244, 63, 94, 0.9);
+      will-change: transform, opacity;
       animation: deleteShockwaveRing 0.54s cubic-bezier(0.18, 0.92, 0.32, 1) forwards;
     }
 
@@ -922,7 +894,7 @@
       top: -3px;
       border-radius: 9999px;
       background: radial-gradient(circle, #ffffff 0%, #fb7185 55%, #e11d48 100%);
-      box-shadow: 0 0 10px #f43f5e;
+      will-change: transform, opacity;
       animation: deleteSparkScatter 0.56s cubic-bezier(0.16, 0.9, 0.3, 1) forwards;
     }
 
@@ -996,6 +968,7 @@
       top: -12px;
       border-radius: 9999px;
       background: radial-gradient(circle, rgba(255, 61, 139, 0.85) 0%, rgba(255, 110, 180, 0.4) 45%, transparent 72%);
+      will-change: transform, opacity;
       animation: heartGlowBurst 0.68s cubic-bezier(0.22, 1.25, 0.32, 1) forwards;
     }
 
@@ -1007,7 +980,8 @@
       top: -10px;
       border-radius: 9999px;
       border: 2px solid #ff4d94;
-      box-shadow: 0 0 14px rgba(255, 61, 139, 0.9);
+      box-shadow: 0 0 10px rgba(255, 61, 139, 0.85);
+      will-change: transform, opacity;
       animation: heartRingExpand 0.64s cubic-bezier(0.22, 1.32, 0.32, 1) forwards;
     }
 
@@ -1023,10 +997,9 @@
       width: 5px;
       height: 5px;
       left: -2.5px;
-      top: -2.5px;
-      border-radius: 9999px;
+      top: -2.5px;      border-radius: 9999px;
       background: #ff66a6;
-      box-shadow: 0 0 8px #ff3d8b;
+      will-change: transform, opacity;
       animation: heartSparkFly 0.66s cubic-bezier(0.22, 1.28, 0.32, 1) forwards;
     }
 
@@ -1052,15 +1025,14 @@
       position: relative;
       overflow: hidden;
       border-radius: 26px;
-      background: rgba(var(--glass-rgb), calc(var(--glass-alpha) + 0.16));
-      backdrop-filter: blur(22px) saturate(180%);
-      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      background: rgba(var(--glass-rgb), calc(var(--glass-alpha) + 0.2));
       border: 1.5px solid color-mix(in srgb, var(--track-1) 72%, rgba(255, 255, 255, 0.2));
       box-shadow:
         0 14px 36px rgba(0, 0, 0, 0.5),
-        0 0 28px -6px var(--track-glow),
+        0 0 24px -6px var(--track-glow),
         inset 0 1px 1.5px rgba(255, 255, 255, 0.25);
       cursor: pointer;
+      transform: translateZ(0);
       transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.18s ease, box-shadow 0.35s ease, border-color 0.35s ease;
     }
 
@@ -1078,16 +1050,16 @@
       transform: scale(1.035);
       border-color: color-mix(in srgb, var(--track-1) 85%, white);
       box-shadow:
-        0 16px 42px rgba(0, 0, 0, 0.56),
-        0 0 36px 2px var(--track-glow),
-        inset 0 0 18px -4px var(--track-glow);
+        0 16px 38px rgba(0, 0, 0, 0.54),
+        0 0 28px 2px var(--track-glow),
+        inset 0 0 16px -4px var(--track-glow);
     }
 
     @keyframes miniPlayerLiquidLaunch {
       0% { transform: scale(1); }
       35% {
         transform: scaleX(0.94) scaleY(0.86);
-        box-shadow: 0 12px 34px rgba(0, 0, 0, 0.55), 0 0 34px 2px var(--track-glow);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55), 0 0 28px 2px var(--track-glow);
       }
       72% { transform: scaleX(1.03) scaleY(1.05); }
       100% { transform: scale(0.96); opacity: 0.4; }
@@ -1100,7 +1072,7 @@
     @keyframes miniPlayerDynamicCatch {
       0% {
         transform: scaleX(1.06) scaleY(0.88);
-        box-shadow: 0 18px 46px rgba(0, 0, 0, 0.56), 0 0 46px 0 var(--track-glow);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.54), 0 0 36px 0 var(--track-glow);
       }
       42% { transform: scaleX(0.98) scaleY(1.045); }
       72% { transform: scaleX(1.012) scaleY(0.988); }
@@ -1148,13 +1120,11 @@
       pointer-events: none;
       visibility: hidden;
       transform-origin: 50% 41%;
-      transform: scale(0.22);
-      border-radius: 44px;
+      transform: scale(0.22) translateZ(0);
       will-change: transform, opacity;
       transition:
-        transform 0.48s cubic-bezier(0.34, 1.44, 0.36, 1),
-        opacity 0.24s ease,
-        border-radius 0.42s ease;
+        transform 0.42s cubic-bezier(0.34, 1.44, 0.36, 1),
+        opacity 0.22s ease;
     }
 
     .now-playing-overlay::after {
@@ -1178,7 +1148,7 @@
       opacity: 1;
       pointer-events: auto;
       visibility: visible;
-      transform: scale(1);
+      transform: scale(1) translateZ(0);
       border-radius: 0px;
     }
 
@@ -1194,11 +1164,12 @@
     }
 
     @keyframes npMeltToDroplet {
-      0% { transform: scale(1); border-radius: 0px; opacity: 1; }
-      55% { transform: scale(0.42); border-radius: 90px; opacity: 0.96; }
-      100% { transform: scale(0.14); border-radius: 160px; opacity: 0; }
+      0% { transform: scale(1) translateZ(0); opacity: 1; }
+      55% { transform: scale(0.42) translateZ(0); opacity: 0.96; }
+      100% { transform: scale(0.14) translateZ(0); opacity: 0; }
     }
 
+    /* GPU-composited lighter shadows on moving droplets for 60/120fps Android WebView */
     .np-droplet-fly {
       position: absolute;
       left: 0;
@@ -1209,6 +1180,7 @@
       pointer-events: none;
       transform-origin: center center;
       will-change: transform, opacity;
+      transform: translate3d(0, 0, 0);
     }
 
     .np-droplet-core {
@@ -1216,18 +1188,15 @@
       width: 100%;
       height: 100%;
       border-radius: 50% 50% 50% 8% / 50% 50% 50% 8%;
-      transform: rotate(45deg);
+      transform: rotate(45deg) translateZ(0);
       background: radial-gradient(
         circle at 66% 34%,
         rgba(255, 255, 255, 0.96) 0%,
-        var(--track-1) 30%,
-        var(--track-2) 68%,
+        var(--track-1) 32%,
+        var(--track-2) 70%,
         var(--track-3) 100%
       );
-      box-shadow:
-        0 0 24px 4px var(--track-glow),
-        inset 0 2px 6px rgba(255, 255, 255, 0.9),
-        inset -3px -4px 8px rgba(0, 0, 0, 0.28);
+      box-shadow: 0 0 14px 2px var(--track-glow);
       transition: border-radius 0.14s ease;
     }
 
@@ -1254,9 +1223,10 @@
       border-radius: 9999px;
       z-index: 95;
       pointer-events: none;
-      background: radial-gradient(circle at 35% 35%, #ffffff 0%, var(--track-1) 48%, var(--track-2) 100%);
-      box-shadow: 0 0 12px 2px var(--track-glow);
+      background: radial-gradient(circle at 35% 35%, #ffffff 0%, var(--track-1) 52%, var(--track-2) 100%);
+      box-shadow: 0 0 8px 1px var(--track-glow);
       will-change: transform, opacity;
+      transform: translate3d(0, 0, 0);
     }
 
     .np-bloom-ring {
@@ -1267,9 +1237,10 @@
       pointer-events: none;
       z-index: 94;
       border: 2.5px solid var(--track-1);
-      box-shadow: 0 0 36px var(--track-glow), inset 0 0 20px var(--track-glow);
+      box-shadow: 0 0 22px var(--track-glow);
       transform: translate(-50%, -50%) scale(0.35);
       opacity: 0.95;
+      will-change: transform, opacity;
       animation: npBloomExpand 0.6s cubic-bezier(0.22, 1.32, 0.32, 1) forwards;
     }
 
@@ -1286,9 +1257,10 @@
       pointer-events: none;
       z-index: 95;
       border: 2.2px solid var(--track-1);
-      box-shadow: 0 0 24px var(--track-glow), inset 0 0 14px var(--track-glow);
+      box-shadow: 0 0 16px var(--track-glow);
       transform: translate(-50%, -50%) scale(0.45);
       opacity: 0.95;
+      will-change: transform, opacity;
       animation: settingsSwallowRipple 0.58s cubic-bezier(0.22, 1.32, 0.32, 1) forwards;
     }
 
@@ -1307,8 +1279,8 @@
       pointer-events: none;
       z-index: 96;
       background: radial-gradient(circle, #ffffff 0%, var(--track-1) 65%);
-      box-shadow: 0 0 10px var(--track-1);
       transform: translate(-50%, -50%);
+      will-change: transform, opacity;
       animation: settingsSplashFly 0.52s cubic-bezier(0.22, 1.32, 0.32, 1) forwards;
     }
 
@@ -1367,12 +1339,12 @@
 
     .np-aura-burst {
       background: radial-gradient(circle, var(--track-glow) 0%, transparent 72%);
-      filter: blur(18px);
+      filter: blur(14px);
     }
 
     .np-aura-ring {
       border: 2.5px solid var(--track-1);
-      box-shadow: 0 0 28px var(--track-glow), inset 0 0 18px var(--track-glow);
+      box-shadow: 0 0 20px var(--track-glow);
     }
 
     .np-aura-burst.burst-active {
@@ -1400,12 +1372,12 @@
       border-radius: 34px;
       padding: 3px;
       background: conic-gradient(from 0deg, var(--track-1), var(--track-2), var(--track-3), var(--track-1));
-      box-shadow: 0 22px 54px rgba(0, 0, 0, 0.58), 0 0 38px -8px var(--track-glow);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.56), 0 0 30px -8px var(--track-glow);
       transition: transform 0.44s cubic-bezier(0.34, 1.56, 0.42, 1), box-shadow 0.35s ease;
     }
 
     .np-cover-card.is-playing {
-      box-shadow: 0 26px 64px rgba(0, 0, 0, 0.62), 0 0 52px -4px var(--track-glow);
+      box-shadow: 0 24px 56px rgba(0, 0, 0, 0.6), 0 0 42px -4px var(--track-glow);
     }
 
     .np-cover-card.cover-slide-next {
@@ -1461,9 +1433,7 @@
 
     .np-controls-panel {
       border-radius: 30px;
-      background: rgba(var(--glass-rgb), calc(var(--glass-alpha) + 0.16));
-      backdrop-filter: blur(22px) saturate(180%);
-      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      background: rgba(var(--glass-rgb), calc(var(--glass-alpha) + 0.22));
       border: 1px solid rgba(var(--glass-border-rgb), calc(var(--glass-border-alpha) + 0.06));
       box-shadow:
         0 18px 44px rgba(0, 0, 0, 0.45),
@@ -1474,9 +1444,9 @@
     .np-controls-panel.panel-aura-flash {
       border-color: color-mix(in srgb, var(--track-1) 75%, white);
       box-shadow:
-        0 18px 46px rgba(0, 0, 0, 0.48),
-        0 0 34px -4px var(--track-glow),
-        inset 0 0 18px -6px var(--track-glow);
+        0 18px 44px rgba(0, 0, 0, 0.48),
+        0 0 28px -4px var(--track-glow),
+        inset 0 0 16px -6px var(--track-glow);
     }
 
     .play-main-btn {
@@ -1490,7 +1460,7 @@
       border: none;
       cursor: pointer;
       background: linear-gradient(135deg, var(--track-1), var(--track-2));
-      box-shadow: 0 10px 28px var(--track-glow), inset 0 2px 3px rgba(255, 255, 255, 0.65);
+      box-shadow: 0 10px 26px var(--track-glow), inset 0 2px 3px rgba(255, 255, 255, 0.65);
       transition: transform 0.38s cubic-bezier(0.34, 1.65, 0.54, 1), box-shadow 0.3s ease;
     }
 
@@ -1574,7 +1544,7 @@
       box-shadow:
         0 24px 60px rgba(0, 0, 0, 0.65),
         0 0 0 1px rgba(255, 255, 255, 0.14),
-        0 0 30px -10px var(--accent-glow);
+        0 0 26px -10px var(--accent-glow);
       transition: transform 0.48s cubic-bezier(0.34, 1.48, 0.38, 1), opacity 0.24s ease;
       will-change: transform, opacity;
     }
@@ -1627,9 +1597,10 @@
       pointer-events: none;
       z-index: 94;
       border: 2.5px solid var(--accent-1);
-      box-shadow: 0 0 32px var(--accent-glow), inset 0 0 18px var(--accent-glow);
+      box-shadow: 0 0 22px var(--accent-glow);
       transform: translate(-50%, -50%) scale(0.35);
       opacity: 0.95;
+      will-change: transform, opacity;
       animation: settingsBloomExpand 0.56s cubic-bezier(0.22, 1.32, 0.32, 1) forwards;
     }
 
@@ -1689,6 +1660,7 @@
       transition: opacity 0.12s ease, transform 0.14s ease !important;
     }
 
+    /* GPU-composited lighter shadows on moving droplets for 60/120fps Android WebView */
     .liquid-droplet-fly {
       position: absolute;
       left: 0;
@@ -1699,6 +1671,7 @@
       pointer-events: none;
       transform-origin: center center;
       will-change: transform, opacity;
+      transform: translate3d(0, 0, 0);
     }
 
     .liquid-droplet-core {
@@ -1706,18 +1679,15 @@
       width: 100%;
       height: 100%;
       border-radius: 50% 50% 50% 8% / 50% 50% 50% 8%;
-      transform: rotate(45deg);
+      transform: rotate(45deg) translateZ(0);
       background: radial-gradient(
         circle at 66% 34%,
         rgba(255, 255, 255, 0.96) 0%,
-        var(--accent-1) 30%,
-        var(--accent-2) 68%,
+        var(--accent-1) 32%,
+        var(--accent-2) 70%,
         var(--accent-3) 100%
       );
-      box-shadow:
-        0 0 22px 4px var(--accent-glow),
-        inset 0 2px 6px rgba(255, 255, 255, 0.9),
-        inset -3px -4px 8px rgba(0, 0, 0, 0.28);
+      box-shadow: 0 0 14px 2px var(--accent-glow);
       transition: border-radius 0.14s ease;
     }
 
@@ -1744,9 +1714,10 @@
       border-radius: 9999px;
       z-index: 95;
       pointer-events: none;
-      background: radial-gradient(circle at 35% 35%, #ffffff 0%, var(--accent-1) 48%, var(--accent-3) 100%);
-      box-shadow: 0 0 12px 2px var(--accent-glow);
+      background: radial-gradient(circle at 35% 35%, #ffffff 0%, var(--accent-1) 52%, var(--accent-3) 100%);
+      box-shadow: 0 0 8px 1px var(--accent-glow);
       will-change: transform, opacity;
+      transform: translate3d(0, 0, 0);
     }
 
     .settings-swallow-ring {
@@ -1757,9 +1728,10 @@
       pointer-events: none;
       z-index: 95;
       border: 2.2px solid var(--accent-1);
-      box-shadow: 0 0 22px var(--accent-glow), inset 0 0 14px var(--accent-glow);
+      box-shadow: 0 0 14px var(--accent-glow);
       transform: translate(-50%, -50%) scale(0.45);
       opacity: 0.95;
+      will-change: transform, opacity;
       animation: settingsSwallowRipple 0.58s cubic-bezier(0.22, 1.32, 0.32, 1) forwards;
     }
 
@@ -1778,8 +1750,8 @@
       pointer-events: none;
       z-index: 96;
       background: radial-gradient(circle, #ffffff 0%, var(--accent-1) 65%);
-      box-shadow: 0 0 10px var(--accent-1);
       transform: translate(-50%, -50%);
+      will-change: transform, opacity;
       animation: settingsSplashFly 0.52s cubic-bezier(0.22, 1.32, 0.32, 1) forwards;
     }
 
@@ -1806,9 +1778,7 @@
       border-radius: 9999px;
       font-size: 12px;
       font-weight: 700;
-      background: rgba(12, 18, 34, 0.9);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(12, 18, 34, 0.94);
       border: 1px solid rgba(255, 255, 255, 0.16);
       box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), 0 0 18px -4px var(--accent-glow);
       transition: transform 0.42s cubic-bezier(0.34, 1.52, 0.36, 1), opacity 0.28s ease;
@@ -2026,8 +1996,7 @@
                   <span class="cover-eq-bar"></span>
                   <span class="cover-eq-bar"></span>
                   <span class="cover-eq-bar"></span>
-                  <span class="cover-eq-bar"></span>
-                  <span class="cover-eq-bar"></span>
+                  <span class="cover-eq-bar"></span>                  <span class="cover-eq-bar"></span>
                   <span class="cover-eq-bar"></span>
                 </div>
               </div>
@@ -2598,10 +2567,31 @@
         return result;
       }
 
-      function extractColorsFromCover(coverUrl) {
+      function generateFallbackColors(seed = '') {
+        const palettes = [
+          { c1: '#00f2fe', c2: '#4facfe', c3: '#a855f7', glow: 'rgba(0, 242, 254, 0.55)' },
+          { c1: '#fbbf24', c2: '#fb7185', c3: '#ec4899', glow: 'rgba(251, 113, 133, 0.55)' },
+          { c1: '#34d399', c2: '#06b6d4', c3: '#3b82f6', glow: 'rgba(52, 211, 153, 0.55)' },
+          { c1: '#c084fc', c2: '#818cf8', c3: '#38bdf8', glow: 'rgba(192, 132, 252, 0.55)' },
+          { c1: '#ff2e63', c2: '#ff5f6d', c3: '#ffc371', glow: 'rgba(255, 46, 99, 0.56)' },
+          { c1: '#2dd4bf', c2: '#38bdf8', c3: '#a855f7', glow: 'rgba(45, 212, 191, 0.55)' }
+        ];
+        let hash = 0;
+        const str = String(seed || 'liquid-neon');
+        for (let i = 0; i < str.length; i++) {
+          hash = ((hash << 5) - hash + str.charCodeAt(i)) | 0;
+        }
+        return palettes[Math.abs(hash) % palettes.length];
+      }
+
+      function extractColorsFromCover(coverUrl, fallbackSeed = '') {
         return new Promise((resolve) => {
-          if (!coverUrl) { resolve(null); return; }
+          const fallback = () => resolve(fallbackSeed ? generateFallbackColors(fallbackSeed) : null);
+          if (!coverUrl) { fallback(); return; }
           const img = new Image();
+          if (!coverUrl.startsWith('data:') && !coverUrl.startsWith('blob:')) {
+            img.crossOrigin = 'anonymous';
+          }
           img.onload = () => {
             try {
               const canvas = document.createElement('canvas');
@@ -2653,10 +2643,10 @@
                 glow: `rgba(${best1.r}, ${best1.g}, ${best1.b}, 0.58)`
               });
             } catch (_) {
-              resolve(null);
+              fallback();
             }
           };
-          img.onerror = () => resolve(null);
+          img.onerror = fallback;
           img.src = coverUrl;
         });
       }
@@ -2665,8 +2655,9 @@
       // 2. AUDIO ENGINE (REAL WEB AUDIO + LOCAL FILES)
       // =========================================
       class HybridAudioEngine {
-        constructor(onEnded) {
+        constructor(onEnded, onPlayStateChange) {
           this.onEnded = onEnded;
+          this.onPlayStateChange = onPlayStateChange;
           this.audioEl = new Audio();
           this.audioEl.preload = 'metadata';
           this.audioEl.addEventListener('ended', () => {
@@ -2695,7 +2686,17 @@
 
         loadTrack(track, autoPlay, initialOffset = 0) {
           this.currentTrack = track;
-          if (window.AndroidMusic) { try { window.AndroidMusic.updateMetadata(JSON.stringify({ title: track.title || '', artist: track.artist || '', album: track.album || '', artwork: track.coverUrl || '', duration: Math.max(0, Number(track.duration || 0) * 1000) })); } catch (_) {} }
+          if (window.AndroidMusic) {
+            try {
+              window.AndroidMusic.updateMetadata(JSON.stringify({
+                title: track.title || '',
+                artist: track.artist || '',
+                album: track.album || '',
+                artwork: track.coverUrl || '',
+                duration: Math.max(0, Number(track.duration || 0) * 1000)
+              }));
+            } catch (_) {}
+          }
           this.currentTime = Math.max(0, initialOffset || 0);
           this.stepIdx = 0;
           this.audioEl.pause();
@@ -2721,27 +2722,38 @@
             this.play();
           } else {
             this.isPlaying = false;
+            if (this.onPlayStateChange) this.onPlayStateChange(false);
           }
         }
 
         play() {
           this.ensureCtx();
           this.isPlaying = true;
-          if (window.AndroidMusic) { try { window.AndroidMusic.setPlaybackState(true, Math.round(this.getCurrentTime() * 1000)); } catch (_) {} }
+          if (window.AndroidMusic) {
+            try {
+              window.AndroidMusic.setPlaybackState(true, Math.round(this.getCurrentTime() * 1000));
+            } catch (_) {}
+          }
           this.lastTick = performance.now();
           if (this.mode === 'file') {
             this.audioEl.play().catch(() => {});
           } else if (this.ctx) {
             this.nextNoteTime = this.ctx.currentTime + 0.04;
           }
+          if (this.onPlayStateChange) this.onPlayStateChange(true);
         }
 
         pause() {
           this.isPlaying = false;
-          if (window.AndroidMusic) { try { window.AndroidMusic.setPlaybackState(false, Math.round(this.getCurrentTime() * 1000)); } catch (_) {} }
+          if (window.AndroidMusic) {
+            try {
+              window.AndroidMusic.setPlaybackState(false, Math.round(this.getCurrentTime() * 1000));
+            } catch (_) {}
+          }
           if (this.mode === 'file') {
             this.audioEl.pause();
           }
+          if (this.onPlayStateChange) this.onPlayStateChange(false);
         }
 
         seek(seconds) {
@@ -2750,6 +2762,14 @@
           this.currentTime = clamped;
           if (this.mode === 'file' && isFinite(this.audioEl.duration)) {
             this.audioEl.currentTime = clamped;
+          }
+          if (window.AndroidMusic) {
+            try {
+              window.AndroidMusic.updatePosition(
+                Math.round(clamped * 1000),
+                Math.round(dur * 1000)
+              );
+            } catch (_) {}
           }
         }
 
@@ -2850,12 +2870,11 @@
         resize() {
           if (!this.canvas) return;
           const parent = this.canvas.parentElement;
-          const rect = parent ? parent.getBoundingClientRect() : null;
-          const w = (rect && rect.width > 0) ? rect.width : (this.canvas.clientWidth || 390);
-          const h = (rect && rect.height > 0) ? rect.height : (this.canvas.clientHeight || 844);
-          const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-          this.w = w;
-          this.h = h;
+          const w = parent ? parent.clientWidth : (this.canvas.clientWidth || 390);
+          const h = parent ? parent.clientHeight : (this.canvas.clientHeight || 844);
+          const dpr = 1;
+          this.w = w || 390;
+          this.h = h || 844;
           this.canvas.width = Math.max(1, Math.floor(this.w * dpr));
           this.canvas.height = Math.max(1, Math.floor(this.h * dpr));
           this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -2976,8 +2995,7 @@
           if (!this.container || !this.canvas) return;
           const w = this.container.clientWidth;
           const h = this.container.clientHeight;
-          if (!w || !h) return;
-          const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+          if (!w || !h) return;          const dpr = 1;
           const targetW = Math.floor(w * dpr);
           const targetH = Math.floor(h * dpr);
           if (this.w === w && this.h === h && this.canvas.width === targetW && this.canvas.height === targetH) return;
@@ -3253,6 +3271,71 @@
           bgFileInput: $('bgFileInput')
         };
 
+        // Helper to reset CSS animations without forced synchronous reflow (no offsetWidth)
+        function restartAnimClass(el, className) {
+          if (!el) return;
+          el.classList.remove(className);
+          requestAnimationFrame(() => {
+            el.classList.add(className);
+          });
+        }
+
+        // Cached layout measurements to avoid querying getBoundingClientRect() during animations
+        const cachedRects = {
+          shellW: 390,
+          shellH: 844,
+          shellLeft: 0,
+          shellTop: 0,
+          themeBtnCx: 0,
+          themeBtnCy: 0,
+          settingsBtnCx: 0,
+          settingsBtnCy: 0,
+          miniCoverCx: 0,
+          miniCoverCy: 0,
+          tabContainerLeft: 0,
+          tabCenters: []
+        };
+
+        function updateCachedRects() {
+          if (!dom.appShell) return;
+          const sRect = dom.appShell.getBoundingClientRect();
+          if (!sRect.width || !sRect.height) return;
+          cachedRects.shellW = sRect.width;
+          cachedRects.shellH = sRect.height;
+          cachedRects.shellLeft = sRect.left;
+          cachedRects.shellTop = sRect.top;
+
+          if (dom.themeBtn) {
+            const r = dom.themeBtn.getBoundingClientRect();
+            cachedRects.themeBtnCx = r.left - sRect.left + r.width / 2;
+            cachedRects.themeBtnCy = r.top - sRect.top + r.height / 2;
+          }
+          if (dom.settingsBtn) {
+            const r = dom.settingsBtn.getBoundingClientRect();
+            cachedRects.settingsBtnCx = r.left - sRect.left + r.width / 2;
+            cachedRects.settingsBtnCy = r.top - sRect.top + r.height / 2;
+          }
+          const miniSource = dom.miniCover || dom.miniPlayer;
+          if (miniSource) {
+            const r = miniSource.getBoundingClientRect();
+            cachedRects.miniCoverCx = r.left - sRect.left + r.width / 2;
+            cachedRects.miniCoverCy = r.top - sRect.top + r.height / 2;
+          }
+          if (dom.categoryTabs) {
+            const cRect = dom.categoryTabs.getBoundingClientRect();
+            cachedRects.tabContainerLeft = cRect.left;
+            cachedRects.tabCenters = Array.from(dom.categoryTabs.querySelectorAll('.tab-btn')).map((btn) => {
+              const bRect = btn.getBoundingClientRect();
+              return {
+                x: bRect.left - cRect.left - 5,
+                w: bRect.width,
+                cx: bRect.left - sRect.left + bRect.width / 2,
+                cy: bRect.top - sRect.top + bRect.height / 2
+              };
+            });
+          }
+        }
+
         const savedPrefs = readLocalPrefs() || {};
 
         const state = {
@@ -3335,7 +3418,7 @@
             state.tracks.forEach((t) => {
               if (t.id && t.id.startsWith('track-')) {
                 demoLikes[t.id] = Boolean(t.liked);
-              } else if (t.id && !t.nativeMedia) {
+              } else if (t.id) {
                 customTracks.push({
                   id: t.id,
                   title: t.title,
@@ -3383,7 +3466,26 @@
           }
         }
 
-        const audioEngine = new HybridAudioEngine(() => handleTrackEnded());
+        let bgAudioTimer = null;
+        function syncBackgroundAudioTimer(isPlaying) {
+          if (isPlaying) {
+            if (!bgAudioTimer) {
+              bgAudioTimer = setInterval(() => {
+                if (!document.hidden && audioEngine.isPlaying && !rafId) {
+                  audioEngine.update(performance.now());
+                }
+              }, 250);
+            }
+          } else if (bgAudioTimer) {
+            clearInterval(bgAudioTimer);
+            bgAudioTimer = null;
+          }
+        }
+
+        const audioEngine = new HybridAudioEngine(
+          () => handleTrackEnded(),
+          (isPlaying) => syncBackgroundAudioTimer(isPlaying)
+        );
         const weatherEngine = new WeatherEngine(dom.weatherCanvas);
         const liquidWaveProgress = new LiquidWaveProgressBar(
           dom.waveProgressContainer,
@@ -3466,23 +3568,18 @@
 
           const overlay = dom.nowPlayingOverlay;
           const coverWrap = dom.npCoverOrbitWrap;
-          const shellRect = dom.appShell.getBoundingClientRect();
-          const sourceEl = dom.miniCover || dom.miniPlayer;
-          const sourceRect = sourceEl.getBoundingClientRect();
-
-          const startX = sourceRect.left - shellRect.left + sourceRect.width / 2;
-          const startY = sourceRect.top - shellRect.top + sourceRect.height / 2;
-          const endX = shellRect.width / 2;
-          const endY = shellRect.height * 0.41;
+          const startX = cachedRects.miniCoverCx || 48;
+          const startY = cachedRects.miniCoverCy || (cachedRects.shellH - 48);
+          const endX = cachedRects.shellW / 2;
+          const endY = cachedRects.shellH * 0.41;
 
           overlay.style.setProperty('--np-cx', `${endX.toFixed(1)}px`);
           overlay.style.setProperty('--np-cy', `${endY.toFixed(1)}px`);
           overlay.classList.remove('closing-droplet', 'open');
 
           if (dom.miniPlayer) {
-            dom.miniPlayer.classList.remove('is-seating', 'is-launching');
-            void dom.miniPlayer.offsetWidth;
-            dom.miniPlayer.classList.add('is-launching');
+            dom.miniPlayer.classList.remove('is-seating');
+            restartAnimClass(dom.miniPlayer, 'is-launching');
           }
           if (dom.mainScreen) {
             dom.mainScreen.classList.add('is-backgrounded');
@@ -3601,9 +3698,7 @@
               overlay.classList.add('open');
 
               if (coverWrap) {
-                coverWrap.classList.remove('is-blooming');
-                void coverWrap.offsetWidth;
-                coverWrap.classList.add('is-blooming');
+                restartAnimClass(coverWrap, 'is-blooming');
               }
 
               requestAnimationFrame(() => liquidWaveProgress.resize());
@@ -3627,21 +3722,14 @@
           npTransitioning = true;
 
           const overlay = dom.nowPlayingOverlay;
-          const shellRect = dom.appShell.getBoundingClientRect();
-          const coverRect = dom.npCoverOrbitWrap
-            ? dom.npCoverOrbitWrap.getBoundingClientRect()
-            : { left: shellRect.left + shellRect.width / 2, top: shellRect.top + shellRect.height * 0.41, width: 0, height: 0 };
-
-          const startX = coverRect.left - shellRect.left + coverRect.width / 2;
-          const startY = coverRect.top - shellRect.top + coverRect.height / 2;
+          const startX = cachedRects.shellW / 2;
+          const startY = cachedRects.shellH * 0.41;
 
           if (dom.miniPlayer) {
             dom.miniPlayer.classList.remove('is-expanded', 'is-seating');
           }
-          const targetEl = dom.miniCover || dom.miniPlayer;
-          const targetRect = targetEl.getBoundingClientRect();
-          const endX = targetRect.left - shellRect.left + targetRect.width / 2;
-          const endY = targetRect.top - shellRect.top + targetRect.height / 2;
+          const endX = cachedRects.miniCoverCx || 48;
+          const endY = cachedRects.miniCoverCy || (cachedRects.shellH - 48);
 
           overlay.style.setProperty('--np-cx', `${startX.toFixed(1)}px`);
           overlay.style.setProperty('--np-cy', `${startY.toFixed(1)}px`);
@@ -3757,9 +3845,8 @@
                 trails.forEach((tr) => tr.el.remove());
 
                 if (dom.miniPlayer) {
-                  dom.miniPlayer.classList.remove('is-anticipating', 'is-seating');
-                  void dom.miniPlayer.offsetWidth;
-                  dom.miniPlayer.classList.add('is-seating');
+                  dom.miniPlayer.classList.remove('is-anticipating');
+                  restartAnimClass(dom.miniPlayer, 'is-seating');
                   triggerMiniPlayerWave();
                 }
 
@@ -3842,11 +3929,9 @@
           clearTimeout(themeSwallowEndTimer);
           clearTimeout(themeGulpTimer);
 
-          const shellRect = dom.appShell.getBoundingClientRect();
-          const btnRect = dom.themeBtn.getBoundingClientRect();
-          const bx = btnRect.left - shellRect.left + btnRect.width / 2;
-          const by = btnRect.top - shellRect.top + btnRect.height / 2;
-          const targetX = shellRect.width / 2;
+          const bx = cachedRects.themeBtnCx || 40;
+          const by = cachedRects.themeBtnCy || 56;
+          const targetX = cachedRects.shellW / 2;
           const targetY = 30;
 
           const toast = dom.themeSwallowToast;
@@ -3860,18 +3945,17 @@
           toast.style.transition = 'none';
           toast.style.opacity = '0';
           toast.style.transform = `translate3d(${bx.toFixed(1)}px, ${by.toFixed(1)}px, 0) translate(-50%, -50%) scale(0.14)`;
-          void toast.offsetWidth;
 
-          toast.style.transition = '';
-          toast.classList.add('is-emerging');
-          toast.style.opacity = '1';
-          toast.style.transform = `translate3d(${targetX.toFixed(1)}px, ${targetY.toFixed(1)}px, 0) translate(-50%, -50%) scale(1)`;
+          requestAnimationFrame(() => {
+            toast.style.transition = '';
+            toast.classList.add('is-emerging');
+            toast.style.opacity = '1';
+            toast.style.transform = `translate3d(${targetX.toFixed(1)}px, ${targetY.toFixed(1)}px, 0) translate(-50%, -50%) scale(1)`;
+          });
 
           themeSwallowHoldTimer = setTimeout(() => {
-            const curShell = dom.appShell.getBoundingClientRect();
-            const curBtn = dom.themeBtn.getBoundingClientRect();
-            const endX = curBtn.left - curShell.left + curBtn.width / 2;
-            const endY = curBtn.top - curShell.top + curBtn.height / 2;
+            const endX = cachedRects.themeBtnCx || 40;
+            const endY = cachedRects.themeBtnCy || 56;
 
             toast.classList.remove('is-emerging');
             toast.classList.add('is-swallowing');
@@ -3879,9 +3963,7 @@
             toast.style.transform = `translate3d(${endX.toFixed(1)}px, ${endY.toFixed(1)}px, 0) translate(-50%, -50%) scale(0.12)`;
 
             themeGulpTimer = setTimeout(() => {
-              dom.themeBtn.classList.remove('theme-btn-swallow');
-              void dom.themeBtn.offsetWidth;
-              dom.themeBtn.classList.add('theme-btn-swallow');
+              restartAnimClass(dom.themeBtn, 'theme-btn-swallow');
             }, 210);
 
             themeSwallowEndTimer = setTimeout(() => {
@@ -3902,22 +3984,17 @@
 
           if (withAnimation) {
             if (dom.themeBtnIcon) {
-              dom.themeBtnIcon.classList.remove('theme-icon-spin');
-              void dom.themeBtnIcon.offsetWidth;
-              dom.themeBtnIcon.classList.add('theme-icon-spin');
+              restartAnimClass(dom.themeBtnIcon, 'theme-icon-spin');
             }
             if (dom.themeBtn && dom.appShell) {
-              const bRect = dom.themeBtn.getBoundingClientRect();
-              const sRect = dom.appShell.getBoundingClientRect();
               const wave = document.createElement('div');
               wave.className = 'theme-wave';
-              wave.style.left = `${bRect.left - sRect.left + bRect.width / 2}px`;
-              wave.style.top = `${bRect.top - sRect.top + bRect.height / 2}px`;
+              wave.style.left = `${(cachedRects.themeBtnCx || 40).toFixed(1)}px`;
+              wave.style.top = `${(cachedRects.themeBtnCy || 56).toFixed(1)}px`;
               dom.appShell.appendChild(wave);
               setTimeout(() => wave.remove(), 850);
             }
-            showThemeSwallowToast(th.name, th.c1);
-          }
+            showThemeSwallowToast(th.name, th.c1);          }
 
           if (save) persistState();
         }
@@ -4066,31 +4143,32 @@
         function triggerTrackSwitchAura(direction) {
           if (dom.npCoverCard && direction) {
             dom.npCoverCard.classList.remove('cover-slide-next', 'cover-slide-prev');
-            void dom.npCoverCard.offsetWidth;
-            dom.npCoverCard.classList.add(direction === 'next' ? 'cover-slide-next' : 'cover-slide-prev');
+            requestAnimationFrame(() => {
+              dom.npCoverCard.classList.add(direction === 'next' ? 'cover-slide-next' : 'cover-slide-prev');
+            });
           }
 
           if (dom.npAuraBurst && dom.npAuraRing) {
-            dom.npAuraBurst.classList.remove('burst-active');
-            dom.npAuraRing.classList.remove('burst-active');
-            void dom.npAuraBurst.offsetWidth;
-            dom.npAuraBurst.classList.add('burst-active');
-            dom.npAuraRing.classList.add('burst-active');
+            restartAnimClass(dom.npAuraBurst, 'burst-active');
+            restartAnimClass(dom.npAuraRing, 'burst-active');
           }
 
           if (dom.npControlsPanel) {
-            dom.npControlsPanel.classList.remove('panel-aura-flash');
-            void dom.npControlsPanel.offsetWidth;
-            dom.npControlsPanel.classList.add('panel-aura-flash');
+            restartAnimClass(dom.npControlsPanel, 'panel-aura-flash');
             setTimeout(() => dom.npControlsPanel.classList.remove('panel-aura-flash'), 650);
           }
         }
 
         function triggerMiniPlayerWave() {
           if (!dom.miniPlayer) return;
-          dom.miniPlayer.classList.remove('wave-surge');
-          void dom.miniPlayer.offsetWidth;
-          dom.miniPlayer.classList.add('wave-surge');
+          restartAnimClass(dom.miniPlayer, 'wave-surge');
+        }
+
+        function syncPlayingCardInList(activeTrackId) {
+          if (!dom.songList) return;
+          dom.songList.querySelectorAll('.song-card').forEach((el) => {
+            el.classList.toggle('is-playing', el.dataset.trackId === activeTrackId);
+          });
         }
 
         function updatePlayerUI() {
@@ -4132,7 +4210,7 @@
           if (dom.repeatBtn) dom.repeatBtn.style.color = state.repeat ? 'var(--track-1)' : '';
 
           syncPlayIcons();
-          renderSongList();
+          syncPlayingCardInList(track.id);
         }
 
         function syncPlayIcons() {
@@ -4158,11 +4236,11 @@
         function togglePlayPause() {
           if (audioEngine.isPlaying) {
             audioEngine.pause();
+            persistState(true);
           } else {
             audioEngine.play();
           }
           syncPlayIcons();
-          persistState(true);
         }
 
         function nextTrack() {
@@ -4198,30 +4276,26 @@
           }
         }
 
+        // Native Android media-session actions used by the lock-screen controls and Samsung Now Bar.
         window.WaterPlayerNativeAction = function(action, positionMs) {
-          if (action === 'play') { audioEngine.play(); syncPlayIcons(); persistState(true); }
-          else if (action === 'pause') { audioEngine.pause(); syncPlayIcons(); persistState(true); }
-          else if (action === 'next') { nextTrack(); }
-          else if (action === 'previous') { prevTrack(); }
-          else if (action === 'seek' && Number.isFinite(Number(positionMs))) { audioEngine.seek(Number(positionMs) / 1000); if (dom.npCurrentTime) dom.npCurrentTime.textContent = formatTime(audioEngine.getCurrentTime()); persistState(true); }
+          if (action === 'play') {
+            audioEngine.play();
+            syncPlayIcons();
+            persistState(true);
+          } else if (action === 'pause') {
+            audioEngine.pause();
+            syncPlayIcons();
+            persistState(true);
+          } else if (action === 'next') {
+            nextTrack();
+          } else if (action === 'previous') {
+            prevTrack();
+          } else if (action === 'seek' && Number.isFinite(Number(positionMs))) {
+            audioEngine.seek(Number(positionMs) / 1000);
+            if (dom.npCurrentTime) dom.npCurrentTime.textContent = formatTime(audioEngine.getCurrentTime());
+            persistState(true);
+          }
         };
-        function importNativeAudioLibrary() {
-          if (!window.AndroidMusic) return;
-          try {
-            const items = JSON.parse(window.AndroidMusic.getAudioLibrary() || '[]');
-            if (!Array.isArray(items) || !items.length) return;
-            const known = new Set(state.tracks.map((track) => track.id)); let added = 0;
-            items.forEach((item, index) => {
-              if (!item || !item.id || known.has(item.id) || !item.fileUrl) return;
-              const hue = (index * 47 + 190) % 360;
-              state.tracks.push({ id:item.id, title:item.title || 'بدون عنوان', artist:item.artist || 'هنرمند ناشناس', album:item.album || 'Local Audio', duration:Math.max(1,Number(item.duration)||180), fileUrl:item.fileUrl, coverUrl:item.coverUrl || null, nativeMedia:true, liked:false, addedAt:Date.now()-index, c1:'hsl('+hue+' 90% 62%)', c2:'hsl('+((hue+48)%360)+' 85% 58%)', c3:'hsl('+((hue+105)%360)+' 82% 62%)', glow:'hsla('+hue+', 90%, 62%, .52)' });
-              known.add(item.id); added++;
-            });
-            if (added) { renderArtistFilterBar(); renderSongList(false); persistState(true); showToast(added + ' آهنگ از حافظه شناسایی شد'); }
-          } catch (error) { console.warn('Water Player media scan failed', error); }
-        }
-        window.onWaterAudioPermissionGranted = importNativeAudioLibrary;
-        if (window.AndroidMusic) { try { window.AndroidMusic.requestPermissions(); } catch (_) {} }
 
         function spawnHeartAura(btnEl) {
           if (!btnEl) return;
@@ -4268,8 +4342,9 @@
           if (btnEl) {
             btnEl.classList.toggle('is-liked', track.liked);
             btnEl.classList.remove('heart-pop', 'heart-unpop');
-            void btnEl.offsetWidth;
-            btnEl.classList.add(track.liked ? 'heart-pop' : 'heart-unpop');
+            requestAnimationFrame(() => {
+              btnEl.classList.add(track.liked ? 'heart-pop' : 'heart-unpop');
+            });
             if (track.liked) spawnHeartAura(btnEl);
           }
 
@@ -4357,8 +4432,9 @@
         function triggerCardSpringRebound(card) {
           if (!card) return;
           card.classList.remove('is-spring-pressing', 'spring-tap-rebound', 'wave-rtl');
-          void card.offsetWidth;
-          card.classList.add('spring-tap-rebound', 'wave-rtl');
+          requestAnimationFrame(() => {
+            card.classList.add('spring-tap-rebound', 'wave-rtl');
+          });
           clearTimeout(card._reboundTimer);
           card._reboundTimer = setTimeout(() => {
             card.classList.remove('spring-tap-rebound', 'wave-rtl');
@@ -4504,6 +4580,10 @@
             card.style.setProperty('--card-glow', track.glow);
             if (withLiquidBloom) {
               card.style.setProperty('--bloom-delay', `${Math.min(itemOrder * 34, 200)}ms`);
+              card.addEventListener('animationend', () => {
+                card.classList.remove('liquid-bloom-in');
+                card.style.opacity = '1';
+              }, { once: true });
             }
 
             card.innerHTML = `
@@ -4838,34 +4918,36 @@
 
         function updateTabGlider(activeBtn, animate = true, fromBtn = null, tabKey = 'all') {
           if (!dom.categoryTabs || !dom.tabGlider || !activeBtn) return;
-          const containerRect = dom.categoryTabs.getBoundingClientRect();
-          const btnRect = activeBtn.getBoundingClientRect();
-          if (btnRect.width === 0) return;
+          updateCachedRects();
+          const toIdx = parseInt(activeBtn.dataset.tabIndex || '0', 10);
+          const finalTo = cachedRects.tabCenters[toIdx];
+          if (!finalTo || !finalTo.w) return;
 
-          const targetX = btnRect.left - containerRect.left - 5;
-          const targetW = btnRect.width;
+          const targetX = finalTo.x;
+          const targetW = finalTo.w;
 
           if (!animate || !lastGliderRect.initialized || !fromBtn || !dom.appShell || document.hidden) {
             clearActiveTabDroplets();
             dom.tabGlider.style.transition = 'none';
             dom.tabGlider.style.width = `${targetW}px`;
             dom.tabGlider.style.transform = `translate3d(${targetX}px, 0, 0) scale(1, 1)`;
-            void dom.tabGlider.offsetWidth;
-            dom.tabGlider.style.transition = '';
+            requestAnimationFrame(() => {
+              dom.tabGlider.style.transition = '';
+            });
             lastGliderRect = { x: targetX, w: targetW, initialized: true };
             return;
           }
 
           clearActiveTabDroplets();
 
-          const shellRect = dom.appShell.getBoundingClientRect();
-          const fromRect = fromBtn.getBoundingClientRect();
+          const fromIdx = parseInt(fromBtn.dataset.tabIndex || '0', 10);
+          const finalFrom = cachedRects.tabCenters[fromIdx] || finalTo;
           const pal = getTabLiquidPalette(tabKey);
 
-          const startX = fromRect.left - shellRect.left + fromRect.width / 2;
-          const startY = fromRect.top - shellRect.top + fromRect.height / 2;
-          const endX = btnRect.left - shellRect.left + btnRect.width / 2;
-          const endY = btnRect.top - shellRect.top + btnRect.height / 2;
+          const startX = finalFrom.cx;
+          const startY = finalFrom.cy;
+          const endX = finalTo.cx;
+          const endY = finalTo.cy;
           const hopDist = Math.abs(endX - startX);
 
           const ctrlX = (startX + endX) / 2;
@@ -4911,8 +4993,7 @@
             const inv = 1 - t;
             const x = inv * inv * startX + 2 * inv * t * ctrlX + t * t * endX;
             const y = inv * inv * startY + 2 * inv * t * ctrlY + t * t * endY;
-            const vx = 2 * inv * (ctrlX - startX) + 2 * t * (endX - ctrlX);
-            const vy = 2 * inv * (ctrlY - startY) + 2 * t * (endY - ctrlY);
+            const vx = 2 * inv * (ctrlX - startX) + 2 * t * (endX - ctrlX);            const vy = 2 * inv * (ctrlY - startY) + 2 * t * (endY - ctrlY);
             return { x, y, vx, vy };
           };
 
@@ -5074,21 +5155,15 @@
           dom.settingsBackdrop.classList.remove('is-closing-droplet', 'open');
           dom.settingsBackdrop.classList.add('is-opening-droplet');
 
-          dom.settingsBtn.classList.remove('settings-btn-launch');
-          void dom.settingsBtn.offsetWidth;
-          dom.settingsBtn.classList.add('settings-btn-launch');
+          restartAnimClass(dom.settingsBtn, 'settings-btn-launch');
 
-          dom.settingsGearIcon.classList.remove('gear-portal-close', 'gear-portal-open');
-          void dom.settingsGearIcon.offsetWidth;
-          dom.settingsGearIcon.classList.add('gear-portal-open');
+          dom.settingsGearIcon.classList.remove('gear-portal-close');
+          restartAnimClass(dom.settingsGearIcon, 'gear-portal-open');
 
-          const shellRect = dom.appShell.getBoundingClientRect();
-          const btnRect = dom.settingsBtn.getBoundingClientRect();
-
-          const startX = btnRect.left - shellRect.left + btnRect.width / 2;
-          const startY = btnRect.top - shellRect.top + btnRect.height / 2;
-          const endX = shellRect.width / 2;
-          const endY = shellRect.height / 2;
+          const startX = cachedRects.settingsBtnCx || 88;
+          const startY = cachedRects.settingsBtnCy || 56;
+          const endX = cachedRects.shellW / 2;
+          const endY = cachedRects.shellH / 2;
 
           const ctrlX = (startX + endX) / 2 + (endX >= startX ? 52 : -52);
           const ctrlY = Math.min(startY, endY) + Math.abs(endY - startY) * 0.25;
@@ -5191,14 +5266,10 @@
           if (!dom.settingsBackdrop.classList.contains('open')) return;
           clearActiveSettingsDroplets();
 
-          const shellRect = dom.appShell.getBoundingClientRect();
-          const modalRect = dom.settingsModal.getBoundingClientRect();
-          const btnRect = dom.settingsBtn.getBoundingClientRect();
-
-          const startX = modalRect.left - shellRect.left + modalRect.width / 2;
-          const startY = modalRect.top - shellRect.top + modalRect.height / 2;
-          const endX = btnRect.left - shellRect.left + btnRect.width / 2;
-          const endY = btnRect.top - shellRect.top + btnRect.height / 2;
+          const startX = cachedRects.shellW / 2;
+          const startY = cachedRects.shellH / 2;
+          const endX = cachedRects.settingsBtnCx || 88;
+          const endY = cachedRects.settingsBtnCy || 56;
 
           const ctrlX = (startX + endX) / 2 + (endX >= startX ? -54 : 54);
           const ctrlY = Math.min(startY, endY) + Math.abs(startY - endY) * 0.48;
@@ -5206,8 +5277,7 @@
           dom.settingsBackdrop.classList.remove('open');
           dom.settingsBackdrop.classList.add('is-closing-droplet');
           dom.settingsGearIcon.classList.remove('gear-portal-open');
-          void dom.settingsGearIcon.offsetWidth;
-          dom.settingsGearIcon.classList.add('gear-portal-close');
+          restartAnimClass(dom.settingsGearIcon, 'gear-portal-close');
 
           settingsDropletTimer = setTimeout(() => {
             const drop = document.createElement('div');
@@ -5310,9 +5380,8 @@
                 drop.remove();
                 trails.forEach((tr) => tr.el.remove());
 
-                dom.settingsBtn.classList.remove('settings-btn-anticipate', 'settings-btn-swallow');
-                void dom.settingsBtn.offsetWidth;
-                dom.settingsBtn.classList.add('settings-btn-swallow');
+                dom.settingsBtn.classList.remove('settings-btn-anticipate');
+                restartAnimClass(dom.settingsBtn, 'settings-btn-swallow');
 
                 const ring1 = document.createElement('div');
                 ring1.className = 'settings-swallow-ring';
@@ -5432,7 +5501,8 @@
               if (meta.coverBlob) {
                 await saveMediaBlob(`cover:${trackId}`, meta.coverBlob);
               }
-              const coverColors = meta.coverUrl ? await extractColorsFromCover(meta.coverUrl) : null;
+              const seed = `${meta.title || cleanName}-${meta.artist || ''}`;
+              const coverColors = meta.coverUrl ? await extractColorsFromCover(meta.coverUrl, seed) : null;
 
               const newTrack = {
                 id: trackId,
@@ -5534,6 +5604,7 @@
         }, { passive: true });
 
         window.addEventListener('resize', () => {
+          updateCachedRects();
           weatherEngine.resize();
           liquidWaveProgress.resize();
           if (dom.categoryTabs) {
@@ -5549,8 +5620,9 @@
         let rafId = null;
         let lastFrameTime = 0;
         let lastWeatherDrawTime = 0;
+        let lastWaveDrawTime = 0;
         let lastEqDrawTime = 0;
-        let lastPosSaveTime = 0;
+        let lastNativePositionSync = 0;
 
         function syncAppPauseState() {
           const isHidden = document.hidden || document.visibilityState === 'hidden';
@@ -5584,18 +5656,30 @@
           lastFrameTime = now;
 
           audioEngine.update(now);
-          if (window.AndroidMusic && audioEngine.isPlaying && now - (window.__waterLastPositionSync || 0) > 1000) {
-            window.__waterLastPositionSync = now;
-            try { window.AndroidMusic.updatePosition(Math.round(audioEngine.getCurrentTime() * 1000), Math.round(audioEngine.getDuration() * 1000)); } catch (_) {}
+          if (window.AndroidMusic && audioEngine.isPlaying && now - lastNativePositionSync >= 1000) {
+            lastNativePositionSync = now;
+            try {
+              window.AndroidMusic.updatePosition(
+                Math.round(audioEngine.getCurrentTime() * 1000),
+                Math.round(audioEngine.getDuration() * 1000)
+              );
+            } catch (_) {}
           }
+
+          const isSettingsOpen =
+            dom.settingsBackdrop &&
+            (dom.settingsBackdrop.classList.contains('open') ||
+              dom.settingsBackdrop.classList.contains('is-opening-droplet') ||
+              dom.settingsBackdrop.classList.contains('is-closing-droplet'));
 
           const isOverlayBusy =
             state.nowPlayingOpen ||
             npTransitioning ||
+            isSettingsOpen ||
             Boolean(settingsDropletRaf) ||
             Boolean(tabDropletRaf);
 
-          if (!isOverlayBusy && now - lastWeatherDrawTime >= 32) {
+          if (!isOverlayBusy && state.weatherMode !== 'off' && now - lastWeatherDrawTime >= 75) {
             const wScale = lastWeatherDrawTime ? Math.min(3, (now - lastWeatherDrawTime) / 33.33) : stepScale;
             lastWeatherDrawTime = now;
             weatherEngine.render(wScale);
@@ -5605,19 +5689,16 @@
           const dur = Math.max(0.1, audioEngine.getDuration());
           const ratio = Math.max(0, Math.min(1, cur / dur));
 
-          if (audioEngine.isPlaying && now - lastPosSaveTime >= 4000) {
-            lastPosSaveTime = now;
-            persistState(true);
-          }
-
-          if (state.nowPlayingOpen) {
-            liquidWaveProgress.render(ratio, audioEngine.isPlaying, stepScale);
+          if (state.nowPlayingOpen && (now - lastWaveDrawTime >= 33 || liquidWaveProgress.isScrubbing)) {
+            const waveScale = lastWaveDrawTime ? Math.min(3, (now - lastWaveDrawTime) / 16.67) : stepScale;
+            lastWaveDrawTime = now;
+            liquidWaveProgress.render(ratio, audioEngine.isPlaying, waveScale);
             if (!liquidWaveProgress.isScrubbing) {
               dom.npCurrentTime.textContent = formatTime(cur);
               dom.npDuration.textContent = formatTime(dur);
             }
 
-            if (now - lastEqDrawTime >= 65) {
+            if (now - lastEqDrawTime >= 80) {
               lastEqDrawTime = now;
               for (let i = 0; i < eqBars.length; i++) {
                 if (audioEngine.isPlaying) {
@@ -5635,9 +5716,8 @@
           }
 
           const needsContinuousFrames =
-            audioEngine.isPlaying ||
             (!isOverlayBusy && state.weatherMode !== 'off') ||
-            (state.nowPlayingOpen && (liquidWaveProgress.amplitude > 0.02 || liquidWaveProgress.isScrubbing));
+            (state.nowPlayingOpen && (audioEngine.isPlaying || liquidWaveProgress.amplitude > 0.02 || liquidWaveProgress.isScrubbing));
 
           if (needsContinuousFrames) {
             rafId = requestAnimationFrame(animateLoop);
@@ -5656,7 +5736,7 @@
         });
 
         // =========================================
-        // 15. BOOTSTRAP WITH SAVED STATE
+        // 15. BOOTSTRAP WITH SAVED STATE & CACHE
         // =========================================
         updateClock();
         setInterval(updateClock, 30000);
@@ -5693,10 +5773,54 @@
         }
 
         requestAnimationFrame(() => {
+          updateCachedRects();
           const initialTabBtn = dom.categoryTabs.querySelector('.tab-btn.is-active');
           if (initialTabBtn) updateTabGlider(initialTabBtn, false);
           wakeAnimationLoop();
+          liquidWaveProgress.resize();
         });
+
+        // Expose bridge for native Android WebView auto-scanned tracks
+        window.applyAutoScannedTracks = async function (scannedTracks) {
+          if (!Array.isArray(scannedTracks) || !scannedTracks.length) return;
+          const nowBase = Date.now();
+          const existingIds = new Set(state.tracks.map((t) => t.id));
+          const processed = await Promise.all(
+            scannedTracks.map(async (item, i) => {
+              const id = item.id || `auto-${nowBase}-${i}`;
+              const title = item.title || 'آهنگ ناشناس';
+              const artist = item.artist || 'خواننده ناشناس';
+              const seed = `${title}-${artist}`;
+              const colors = item.coverUrl
+                ? await extractColorsFromCover(item.coverUrl, seed)
+                : generateFallbackColors(seed);
+              return {
+                id,
+                title,
+                artist,
+                album: item.album || 'Local Audio',
+                duration: Number(item.duration) || 180,
+                liked: Boolean(item.liked),
+                addedAt: item.addedAt || nowBase + (scannedTracks.length - i),
+                coverUrl: item.coverUrl || null,
+                fileUrl: item.fileUrl || item.url || null,
+                c1: colors.c1,
+                c2: colors.c2,
+                c3: colors.c3 || colors.c2,
+                glow: colors.glow
+              };
+            })
+          );
+
+          const fresh = processed.filter((t) => !existingIds.has(t.id));
+          if (fresh.length) {
+            state.tracks.push(...fresh);
+            setSortOrder(state.sortOrder, false, false, false);
+            renderArtistFilterBar();
+            updatePlayerUI();
+            persistState();
+          }
+        };
       }
 
       function bootApp() {
